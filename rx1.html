@@ -1,52 +1,48 @@
 <html>
 <head>
 <title>Learning ReactiveExtensions</title>
-<!--scripts for all time-->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-<script src="rx.min.js" type="text/javascript"></script>
-<script type="text/javascript">
+	<!--scripts for all time-->
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.8.0.js" type="text/javascript"></script> 
+	<script src="file:///C:/Users/drosales/Downloads/Rx/rx.js" type="text/javascript"></script>
+	<script type="text/javascript">
 
-$(document).ready(function() {
-    var mouseDragMe = $("#mouseDragMe").context;
+		$(document).ready(function() {
+					var mouseDragMe = $("#mouseDragMe").context;
 
-    var mouseMove = Rx.Observable.FromHtmlEvent(mouseDragMe, "mousemove");
-    var mouseUp = Rx.Observable.FromHtmlEvent(mouseDragMe, "mouseup");
-    var mouseDown = Rx.Observable.FromHtmlEvent(mouseDragMe, "mousedown");
-		
-		var mouseMoves = mouseMove
-    .Skip(1)
-    .Zip(mouseMove, function(left, right) {
-        return { x1 : left.clientX,
-                 y1 : left.clientY,
-                 x2 : right.clientX,
-                 y2 : right.clientY };
-    });
-		
-		var mouseDrags = mouseDown.SelectMany(function(md) {
-    return mouseMoves.TakeUntil(mouseUp);
-		
-		mouseDrags.Subscribe(function(mouseEvents) {
-    $("#results").html(
-        "Old (X: " + mouseEvents.x1 + " Y: " + mouseEvents.y1 + ") " +
-        "New (X: " + mouseEvents.x2 + " Y: " + mouseEvents.y2 + ")");
-});
-});
-		
-		
-		
-});
-
-
-
-</script>
+					var mouseMove = Rx.Observable.FromHtmlEvent(mouseDragMe, "mousemove");
+					var mouseUp = Rx.Observable.FromHtmlEvent(mouseDragMe, "mouseup");
+					var mouseDown = Rx.Observable.FromHtmlEvent(mouseDragMe, "mousedown");
+				
+						var mouseMoves = mouseMove
+						.Skip(1)
+						.Zip(mouseMove, function(left, right) {
+								return { x1 : left.clientX,
+												 y1 : left.clientY,
+												 x2 : right.clientX,
+												 y2 : right.clientY };
+						});
+				
+						var mouseDrags = mouseDown.SelectMany(function(md) {
+						return mouseMoves.TakeUntil(mouseUp);
+						});
+				
+					mouseDrags.Subscribe(function(mouseEvents) {
+					$("#results").html(
+							"Old (X: " + mouseEvents.x1 + " Y: " + mouseEvents.y1 + ") " +
+							"New (X: " + mouseEvents.x2 + " Y: " + mouseEvents.y2 + ")");
+					});
+			
+		});
+							
+	</script>
 </head>
 
-<body>
+	<body>
 
-<div id="mouseDragMe" style="border:solid 1px red;">
-xxx-yyy-aaa
+		<div id="mouseDragMe" style="border:solid 1px red;padding3px;">
+			xxx-yyy-aaa
+		</div>
+		<div id="results" style="border:solid 1px green: background-color:yellow;"> </div>
 
-</div>
-
-</body>
+	</body>
 </html>
